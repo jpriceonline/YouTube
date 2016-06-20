@@ -1,5 +1,5 @@
 {
-    "name": "socialiteproviders/youtube",
+    "name": "raymondwilkinson/youtube",
     "description": "YouTube OAuth2 Provider for Laravel Socialite",
     "license": "MIT",
     "authors": [{
@@ -8,7 +8,7 @@
     }],
     "require": {
         "php": "^5.6 || ^7.0",
-        "socialiteproviders/manager": "~2.0"
+        "raymondwilkinson/manager": "2.2.*"
     },
     "autoload": {
         "psr-4": {

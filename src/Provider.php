@@ -17,6 +17,8 @@ class Provider extends AbstractProvider implements ProviderInterface
      * {@inheritdoc}
      */
     protected $scopes = [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/youtube.readonly",
         "https://www.googleapis.com/auth/youtubepartner-channel-audit",
         "https://www.googleapis.com/auth/yt-analytics.readonly",
@@ -57,8 +59,17 @@ class Provider extends AbstractProvider implements ProviderInterface
                 'Authorization' => 'Bearer '.$token,
             ],
         ]);
+        $me = $this->getHttpClient()->get(
+            'https://www.googleapis.com/plus/v1/people/me', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+            ],
+        ]);
 
-        return json_decode($response->getBody()->getContents(), true)['items'][0];
+        $data = json_decode($response->getBody()->getContents(), true)['items'][0];
+        $data['me'] = json_decode($me->getBody()->getContents(), true);
+
+        return $data;
     }
 
     /**
@@ -67,7 +78,9 @@ class Provider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            'id' => $user['id'], 'nickname' => $user['snippet']['title'],
+            'id' => $user['id'],
+            'google_id' => $user['me']['id'],
+            'nickname' => $user['snippet']['title'],
             'name' => null, 'email' => null,
             'avatar' => $user['snippet']['thumbnails']['high']['url']
         ]);

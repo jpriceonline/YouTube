@@ -54,7 +54,7 @@ class Provider extends AbstractProvider implements ProviderInterface
     protected function getUserByToken($token)
     {
         $response = $this->getHttpClient()->get(
-            'https://www.googleapis.com/youtube/v3/channels?part=snippet,auditDetails,statistics&mine=true', [
+            'https://www.googleapis.com/youtube/v3/channels?part=snippet,auditDetails,statistics,brandingSettings&mine=true', [
             'headers' => [
                 'Authorization' => 'Bearer '.$token,
             ],
